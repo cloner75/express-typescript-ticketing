@@ -13,6 +13,6 @@ const UserSchema = new mongoose.Schema({
 UserSchema.plugin(paginate);
 UserSchema.plugin(require('mongoose-timestamp'));
 
-const UserModel = mongoose.model('SampleModel', UserSchema);
+const UserModel = mongoose.model('users', UserSchema);
 
 export default UserModel;

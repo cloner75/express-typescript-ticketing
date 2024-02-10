@@ -1,4 +1,4 @@
-import { Express } from 'express';
+import { Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import appModules from './../modules/app.module';
 
@@ -23,6 +23,8 @@ class Connection {
     appModules.map(module => {
       this.application.use(`/v1/${module.prefix}`, module.router);
     });
+
+    this.application.use((_: Request, res: Response) => res.status(404).send('Not Found Route'));
   }
 
   verifyConfigs() {
