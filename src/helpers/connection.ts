@@ -21,7 +21,7 @@ class Connection {
 
   modules() {
     appModules.map(module => {
-      this.application.use(module.prefix, module.router);
+      this.application.use(`/v1/${module.prefix}`, module.router);
     });
   }
 
@@ -46,10 +46,7 @@ class Connection {
   }
 
   mongoConnection() {
-    mongoose.connect(`${process.env.CONNECTION_STRING_DB}`,
-    {
-      
-    })
+    mongoose.connect(`${process.env.CONNECTION_STRING_DB}`)
       .then(() => {
         console.log("🚀 ~ Connection ~ mongoConnection ~ successfuly");
       })
