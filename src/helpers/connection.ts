@@ -20,11 +20,15 @@ class Connection {
   }
 
   modules() {
+    const VERSION_1 = '/v1';
     appModules.map(module => {
-      this.application.use(`/v1/${module.prefix}`, module.router);
+      this.application.use(VERSION_1 + module.prefix, module.router);
     });
 
-    this.application.use((_: Request, res: Response) => res.status(404).send('Not Found Route'));
+    this.application.use((req: Request, res: Response) => res.status(404).send({
+      success: false,
+      message: `Not Found Route : ${req.path} `
+    }));
   }
 
   verifyConfigs() {
