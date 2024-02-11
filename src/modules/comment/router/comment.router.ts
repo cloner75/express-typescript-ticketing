@@ -7,10 +7,10 @@ const validate = new Validator('comment_service');
 const router = Router();
 
 const CommentController = new Comment();
-router.post('/', validate.validate(create, 'create'), CommentController.create);
-router.get('/', validate.validate(find, 'find'), CommentController.find);
-router.get('/:id', validate.validate(findOne, 'findOne'), CommentController.findOne);
-router.put('/:id', validate.validate(update, 'update'), CommentController.update);
-router.delete('/:id', validate.validate(remove, 'remove'), CommentController.delete);
+router.post('/', validate.validate(create, 'POST'), CommentController.create);
+router.get('/', validate.validate(find, 'GET'), CommentController.find);
+router.get('/:id', validate.validate(findOne, 'GET'), CommentController.findOne);
+router.put('/:id', validate.validate(update, 'PUT'), CommentController.update);
+router.delete('/:id', validate.validate(remove, 'DELETE'), CommentController.delete);
 
 export default router;

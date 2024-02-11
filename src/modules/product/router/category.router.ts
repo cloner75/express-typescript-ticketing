@@ -8,10 +8,10 @@ const validate = new Validator('product_category_service');
 const router = Router();
 
 const CategoryController = new Category();
-router.post('/', validate.validate(create, 'create'), CategoryController.create);
-router.get('/', validate.validate(find, 'find'), CategoryController.find);
-router.get('/:id', validate.validate(findOne, 'findOne'), CategoryController.findOne);
-router.put('/:id', validate.validate(update, 'update'), CategoryController.update);
-router.delete('/:id', validate.validate(remove, 'remove'), CategoryController.delete);
+router.post('/', validate.validate(create, 'POST'), CategoryController.create);
+router.get('/', validate.validate(find, 'GET'), CategoryController.find);
+router.get('/:id', validate.validate(findOne, 'GET'), CategoryController.findOne);
+router.put('/:id', validate.validate(update, 'PUT'), CategoryController.update);
+router.delete('/:id', validate.validate(remove, 'DELETE'), CategoryController.delete);
 
 export default router;

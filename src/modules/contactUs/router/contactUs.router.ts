@@ -7,10 +7,10 @@ const validate = new Validator('contact_us_service');
 const router = Router();
 
 const ContactUsController = new ContactUs();
-router.post('/', validate.validate(create, 'create'), ContactUsController.create);
-router.get('/', validate.validate(find, 'find'), ContactUsController.find);
-router.get('/:id', validate.validate(findOne, 'findOne'), ContactUsController.findOne);
-router.put('/:id', validate.validate(update, 'update'), ContactUsController.update);
-router.delete('/:id', validate.validate(remove, 'remove'), ContactUsController.delete);
+router.post('/', validate.validate(create, 'POST'), ContactUsController.create);
+router.get('/', validate.validate(find, 'GET'), ContactUsController.find);
+router.get('/:id', validate.validate(findOne, 'GET'), ContactUsController.findOne);
+router.put('/:id', validate.validate(update, 'PUT'), ContactUsController.update);
+router.delete('/:id', validate.validate(remove, 'DELETE'), ContactUsController.delete);
 
 export default router;

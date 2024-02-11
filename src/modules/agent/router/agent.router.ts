@@ -7,10 +7,10 @@ const validate = new Validator('agent_service');
 const router = Router();
 
 const AgentController = new Auth();
-router.post('/', validate.validate(create, 'create'), AgentController.create);
-router.get('/',validate.validate(find, 'find'), AgentController.find);
-router.get('/:id', validate.validate(findOne, 'findOne'), AgentController.findOne);
-router.put('/:id', validate.validate(update, 'update'), AgentController.update);
-router.delete('/:id', validate.validate(remove, 'remove'), AgentController.delete);
+router.post('/', validate.validate(create, 'POST'), AgentController.create);
+router.get('/',validate.validate(find, 'GET'), AgentController.find);
+router.get('/:id', validate.validate(findOne, 'GET'), AgentController.findOne);
+router.put('/:id', validate.validate(update, 'PUT'), AgentController.update);
+router.delete('/:id', validate.validate(remove, 'DELETE'), AgentController.delete);
 
 export default router;
