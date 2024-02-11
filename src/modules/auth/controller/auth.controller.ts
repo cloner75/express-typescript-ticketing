@@ -53,17 +53,35 @@ class AuthController extends UserService {
 * @param res 
 * @returns 
 */
-  async refreshToken(req: Request, res: Response): Promise<any> {
-    try {
-      return res.send({
-        success: false
-      });
-    } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
-    }
+async refreshToken(req: Request, res: Response): Promise<any> {
+  try {
+    return res.send({
+      success: false
+    });
+  } catch (err) {
+    return res.send({
+      err: 'err.message'
+    });
   }
+}
+
+  /**
+* 
+* @param req 
+* @param res 
+* @returns 
+*/
+async logout(req: Request, res: Response): Promise<any> {
+  try {
+    return res.send({
+      success: false
+    });
+  } catch (err) {
+    return res.send({
+      err: 'err.message'
+    });
+  }
+}
 }
 
 export default AuthController;
