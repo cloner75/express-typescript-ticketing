@@ -1,6 +1,17 @@
-import routes from './router/product.router';
+import productRoutes from './router/product.router';
+import categoryRoutes from './router/category.router';
+import brandRoutes from './router/brand.router';
 
-export default {
+export const product = {
   prefix: '/product',
-  routes
+  routes: productRoutes
+};
+
+export const category = {
+  prefix: '/category',
+  routes: categoryRoutes
+};
+export const brand = {
+  prefix: '/brand',
+  routes: brandRoutes
 };
