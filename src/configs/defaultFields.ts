@@ -1,0 +1,16 @@
+export default {
+  product: [],
+  brand: [],
+  category: [],
+  user: [],
+  customer: [],
+  agent: [],
+  invoice: [],
+  ticket: [],
+  request: [],
+  comment: [],
+  blog: [],
+  option: [],
+  wallet: [],
+  contactUs: [],
+};
