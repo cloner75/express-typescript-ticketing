@@ -5,6 +5,7 @@ const CommentSchema = new mongoose.Schema({
   text: { type: String, required: true },
   productId: { type: mongoose.Schema.Types.ObjectId, required: true },
   commentId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  isShow: { type: Boolean, required: true, default: false },
   creator: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
 
