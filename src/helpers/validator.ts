@@ -21,7 +21,7 @@ class validator {
           data = { ...req.params, ...req.body };
       }
       try {
-        await schema.validate(data);
+        await schema.validateAsync(data);
         next();
       } catch (err) {
         return responser.success(false, httpStatus.BAD_REQUEST, httpStatus['400_MESSAGE'], err);
