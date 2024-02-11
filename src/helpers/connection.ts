@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import appModules from './../modules/app.module';
 
 class Connection {
-  application: any;
+  application: Express | any;
   express: any;
   constructor(app: Express | any) {
     this.express = app;
