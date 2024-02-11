@@ -17,12 +17,14 @@ class BlogController extends UserService {
     const sendResponse = new Responser(res, 'login');
     try {
       const { email } = req.body;
+      console.log("🚀 ~ BlogController ~ create ~ email:", email)
       const getUser = await super.getUserByEmail(email);
       if (!getUser.success) {
         return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE']);
       }
       return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getUser.data);
     } catch (err) {
+      console.log("🚀 ~ BlogController ~ create ~ err:", err)
       return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
