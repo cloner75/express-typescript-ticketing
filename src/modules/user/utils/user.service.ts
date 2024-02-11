@@ -15,12 +15,23 @@ class UserService {
     };
   }
 
-  async createAgent(){}
+  async createAgent() { }
+  async getAgent() { }
+  async getAgentById() { }
+  async updateAgentById() { }
 
-  async getAgent(){}
 
-  async getAgentById(){}
+  async createCustomer() { }
+  async getCustomer() { }
+  async getCustomerById() { }
+  async updateCustomer() { }
 
+
+
+  async createWriter() { }
+  async getWriter() { }
+  async getWriterById() { }
+  async updateWriter() { }
 }
 
 export default UserService;
