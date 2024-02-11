@@ -5,7 +5,7 @@ import commentModule from './comment/comment.module';
 import contactUsModule from './contactUs/contactUs.module';
 import customerModule from './customer/customer.module';
 import optionModule from './option/option.module';
-import productModule from './product/product.module';
+import { product, category, brand } from './product/product.module';
 import ticketModule from './ticket/ticket.module';
 import userModule from './user/user.module';
 import walletModule from './wallet/wallet.module';
@@ -20,8 +20,16 @@ export default [
     router: walletModule.routes
   },
   {
-    prefix: productModule.prefix,
-    router: productModule.routes
+    prefix: product.prefix,
+    router: product.routes
+  },
+  {
+    prefix: category.prefix,
+    router: category.routes
+  },
+  {
+    prefix: brand.prefix,
+    router: brand.routes
   },
   {
     prefix: ticketModule.prefix,
