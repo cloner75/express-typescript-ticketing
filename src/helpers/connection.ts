@@ -39,6 +39,14 @@ class Connection {
     if (!process.env.CONNECTION_STRING_DB) {
       throw new Error('set CONNECTION_STRING_DB in env file');
     }
+
+    if(!process.env.JWT_SECRET_KEY){
+      throw new Error('set JWT_SECRET_KEY in env file');
+    }
+
+    if(!process.env.SALT_ROUNDS){
+      throw new Error('set SALT_ROUNDS in env file');
+    }
   }
 
   nodeEvents() {
