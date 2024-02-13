@@ -15,7 +15,3 @@ export const signup = joi.object({
   password: joi.string().trim().min(8).max(45).required(),
 });
 
-export const refreshToken = joi.object({
-
-});
-
