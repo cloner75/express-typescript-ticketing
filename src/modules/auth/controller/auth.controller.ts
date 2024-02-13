@@ -1,9 +1,32 @@
 import { Request, Response } from 'express';
+import * as cookie from 'cookie';
 import UserService from './../../user/utils/user.service';
 import Responser from '../../../helpers/response';
 import httpStatus from 'http-status';
+import jwt from './../../../helpers/jsonwebtoken';
+import * as bcrypt from 'bcrypt';
 
-class AuthController extends UserService {
+class AuthService extends UserService {
+  constructor() {
+    super();
+  }
+  setTokens(res: Response, payload: any) {
+    const access_token = String(jwt.sign(payload));
+    const refresh_token = String(jwt.sign(payload, '30d'));
+
+    res
+      .setHeader('Set-Cookie', cookie.serialize('access_token', access_token, {
+        httpOnly: true,
+        maxAge: 60 * 10 // 10 min
+      }))
+      .setHeader('Set-Cookie', cookie.serialize('refresh_token', refresh_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 30 // 1 month
+      }));
+  }
+}
+
+class AuthController extends AuthService {
   constructor() {
     super();
   }
@@ -16,12 +39,30 @@ class AuthController extends UserService {
   async login(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'login');
     try {
-      const { email } = req.body;
-      const getUser = await super.getUserByEmail(email);
+      const { email: inputEmail, password } = req.body;
+      const getUser = await super.getUserByEmail(inputEmail);
       if (!getUser.success) {
-        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE']);
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE']);
       }
-      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getUser.data);
+      const checkPassword = await bcrypt.compare(password, getUser.data.password);
+      if (!checkPassword) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE']);
+      }
+      const { _id, username, email, createdAt, role } = getUser.data;
+      super.setTokens(res, {
+        _id,
+        username,
+        email,
+        createdAt,
+        role
+      });
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], {
+        _id,
+        username,
+        email,
+        createdAt,
+        role
+      });
     } catch (err) {
       return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
@@ -34,15 +75,47 @@ class AuthController extends UserService {
  * @returns 
  */
   async signup(req: Request, res: Response): Promise<any> {
+    const responser = new Responser(res, 'signup');
     try {
-      const { email, password } = req.body;
-      return res.send({
-        success: false
-      });
+      const { email, password, username } = req.body;
+      const createUser = await super.signupUser(email, password, username);
+      if (createUser.success) {
+        const { _id, username, email, createdAt, role } = createUser.data;
+        super.setTokens(res, {
+          _id,
+          username,
+          email,
+          createdAt,
+          role
+        });
+        return responser.success(
+          true,
+          httpStatus.OK,
+          httpStatus['200_MESSAGE'],
+          {
+            _id,
+            username,
+            email,
+            createdAt,
+            role
+          }
+        );
+      } else if (!createUser.success) {
+        return responser.success(
+          false,
+          httpStatus.CONFLICT,
+          httpStatus['409_MESSAGE'],
+          {
+            message: createUser.message
+          }
+        );
+      }
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return responser.error(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        httpStatus['500_MESSAGE'],
+        err
+      );
     }
   }
 
@@ -53,17 +126,17 @@ class AuthController extends UserService {
 * @param res 
 * @returns 
 */
-async refreshToken(req: Request, res: Response): Promise<any> {
-  try {
-    return res.send({
-      success: false
-    });
-  } catch (err) {
-    return res.send({
-      err: 'err.message'
-    });
+  async refreshToken(req: Request, res: Response): Promise<any> {
+    try {
+      return res.send({
+        success: false
+      });
+    } catch (err) {
+      return res.send({
+        err: 'err.message'
+      });
+    }
   }
-}
 
   /**
 * 
@@ -71,17 +144,17 @@ async refreshToken(req: Request, res: Response): Promise<any> {
 * @param res 
 * @returns 
 */
-async logout(req: Request, res: Response): Promise<any> {
-  try {
-    return res.send({
-      success: false
-    });
-  } catch (err) {
-    return res.send({
-      err: 'err.message'
-    });
+  async logout(req: Request, res: Response): Promise<any> {
+    try {
+      return res.send({
+        success: false
+      });
+    } catch (err) {
+      return res.send({
+        err: 'err.message'
+      });
+    }
   }
-}
 }
 
 export default AuthController;
