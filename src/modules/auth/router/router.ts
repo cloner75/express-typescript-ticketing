@@ -7,9 +7,9 @@ const validate = new Validator('auth_service');
 const router = Router();
 
 const AuthController = new Auth();
-router.post('/login', validate.validate(login, 'login'), AuthController.login);
-router.post('/login', validate.validate(logout, 'logout'), AuthController.logout);
-router.post('/signup', validate.validate(signup, 'signup'), AuthController.signup);
-router.post('/refresh', validate.validate(refreshToken, 'refreshToken'), AuthController.refreshToken);
+router.post('/login', validate.validate(login, 'POST'), AuthController.login);
+router.post('/login', validate.validate(logout, 'POST'), AuthController.logout);
+router.post('/signup', validate.validate(signup, 'POST'), AuthController.signup);
+router.post('/refresh', validate.validate(refreshToken, 'POST'), AuthController.refreshToken);
 
 export default router;
