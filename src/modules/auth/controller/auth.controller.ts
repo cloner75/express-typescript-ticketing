@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, response } from 'express';
 import * as cookie from 'cookie';
 import UserService from './../../user/utils/user.service';
 import Responser from '../../../helpers/response';
@@ -14,15 +14,16 @@ class AuthService extends UserService {
     const access_token = String(jwt.sign(payload));
     const refresh_token = String(jwt.sign(payload, '30d'));
 
-    res
-      .setHeader('Set-Cookie', cookie.serialize('access_token', access_token, {
-        httpOnly: true,
-        maxAge: 60 * 10 // 10 min
-      }))
-      .setHeader('Set-Cookie', cookie.serialize('refresh_token', refresh_token, {
-        httpOnly: true,
+    res.setHeader('Set-Cookie',
+      [cookie.serialize('access_token', access_token, {
+        httpOnly: false,
+        maxAge: 60 * 30 // 10 min
+      }),
+      cookie.serialize('refresh_token', refresh_token, {
+        httpOnly: false,
         maxAge: 60 * 60 * 24 * 30 // 1 month
-      }));
+      })
+      ]);
   }
 }
 
@@ -127,14 +128,40 @@ class AuthController extends AuthService {
 * @returns 
 */
   async refreshToken(req: Request, res: Response): Promise<any> {
+    const responser = new Responser(res, 'refreshToken');
     try {
-      return res.send({
-        success: false
+      const { email: inputEmail } = req.body.user;
+      const getUser = await super.getUserByEmail(inputEmail);
+      if (!getUser.success) {
+        return responser.success(
+          false,
+          httpStatus.NO_CONTENT,
+          httpStatus['204_MESSAGE']
+        );
+      }
+
+      const { _id, username, email, createdAt, role } = getUser.data;
+      super.setTokens(res, {
+        _id,
+        username,
+        email,
+        createdAt,
+        role
       });
+      return responser.success(
+        true,
+        httpStatus.OK,
+        httpStatus['200_MESSAGE'],
+        {
+          _id,
+          username,
+          email,
+          createdAt,
+          role
+        }
+      );
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return responser.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
