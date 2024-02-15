@@ -8,7 +8,10 @@ const ProductSchema = new mongoose.Schema({
   slug: { type: String, required: true },
   colers: [{ type: String, required: true }],
   images: [{ type: String, required: true }],
-  options: [{ type: String, title: String, status: Boolean }],
+  options: [{
+    key: { type: String, required: true },
+    value: { type: String, required: true }
+  }],
   brandId: { type: mongoose.Schema.Types.ObjectId, required: true },
   categoryId: { type: mongoose.Schema.Types.ObjectId, required: true },
   creator: { type: mongoose.Schema.Types.ObjectId, required: true },
