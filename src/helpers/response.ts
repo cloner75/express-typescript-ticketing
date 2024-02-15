@@ -26,6 +26,14 @@ class Responser {
         message
       });
   }
+
+  static serviceResponse(success: boolean, message: string, data: any = {}) {
+    return {
+      success,
+      message,
+      data
+    };
+  }
 }
 
 export default Responser;
