@@ -10,17 +10,20 @@ class validator {
   validate(schema: any, method: string) {
     return async (req: Request, res: Response, next: any) => {
       const responser = new Responser(res, this.service);
-      let data: any = {};
-      switch (method) {
-        case 'POST':
-          data = req.body;
-        case 'GET':
-          data = { ...req.query, ...req.params };
-        case 'DELETE':
-        case 'PUT':
-          data = { ...req.params, ...req.body };
-      }
       try {
+        let data: any = {};
+        switch (method) {
+          case 'POST':
+            data = req.body;
+            break;
+          case 'GET':
+            data = { ...req.params, ...req.query };
+            break;
+          case 'DELETE':
+          case 'PUT':
+            data = { ...req.params, ...req.body };
+            break;
+        }
         await schema.validateAsync(data);
         next();
       } catch (err) {
