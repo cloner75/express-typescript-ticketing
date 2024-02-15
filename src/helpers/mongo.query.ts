@@ -1,12 +1,7 @@
-
-let config: any = {
-  defaultFields: {
-    'test': []
-  }
-};
+import defaultFields from './../configs/defaultFields';
 
 // CONSTS
-const SORT = 'desc';
+const SORT = -1;
 const ORDER_DEFAULT = 'createdAt';
 const LIMIT_DEFAULT = 50;
 const SKIP_DEFAULT = 1;
@@ -22,8 +17,12 @@ class Mongo {
    */
   static selectAllowFields(fields: string, select: string) {
     let result = '';
+    const findDefaultFields = defaultFields.find(item => item.name === select);
+    if (!findDefaultFields) {
+      return result;
+    }
     for (let item of fields.split(',')) {
-      if (config.defaultFields[select].includes(item)) {
+      if (findDefaultFields.value.includes(item)) {
         result += `${item} `;
       }
     }
@@ -45,11 +44,16 @@ class Mongo {
       updatedAtTo,
       ...rest
     } = where;
+    let selectFields = '';
+    if (fields) {
+      selectFields = this.selectAllowFields(fields, select);
+    } else {
+      const findDefaultFields = defaultFields.find(item => item.name === select);
+      selectFields = findDefaultFields && findDefaultFields.value ? findDefaultFields.value.join(' ') : '';
+    }
     const result = {
       options: {
-        select: fields
-          ? this.selectAllowFields(fields, select)
-          : config.defaultFields[select].join(' '),
+        select: selectFields,
         limit: Number(limit) || LIMIT_DEFAULT,
         skip: Number(skip) || SKIP_DEFAULT,
         page: Number(page) || PAGE_DEFAULT,
@@ -58,7 +62,7 @@ class Mongo {
         ...rest,
         createdAt: {
           $gte: createdAtFrom ? createdAtFrom.concat(ISO_DATE) : DATE_DEFAULT,
-          $lt: createdAtTo
+          $lte: createdAtTo
             ? createdAtTo.concat(ISO_DATE)
             : new Date().toISOString(),
         },
@@ -78,9 +82,9 @@ class Mongo {
       }
     }
     if (order) {
-      Object.assign(result.options, { sort: { [order]: sort || SORT } });
+      Object.assign(result.options, { sort: { [order]: Number(sort) || SORT } });
     } else {
-      Object.assign(result.options, { sort: { [ORDER_DEFAULT]: sort || SORT } });
+      Object.assign(result.options, { sort: { [ORDER_DEFAULT]: Number(sort) || SORT } });
     }
     return result;
   }
