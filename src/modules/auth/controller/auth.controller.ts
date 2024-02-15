@@ -6,11 +6,17 @@ import httpStatus from 'http-status';
 import jwt from './../../../helpers/jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 
+declare namespace Express {
+  export interface Request {
+    user?: any;
+  }
+}
+
 class AuthService extends UserService {
   constructor() {
     super();
   }
-  setTokens(res: Response, payload: any) {
+  setTokens(res: Response, payload: any): void {
     const access_token = String(jwt.sign(payload));
     const refresh_token = String(jwt.sign(payload, '30d'));
 
@@ -22,6 +28,19 @@ class AuthService extends UserService {
       cookie.serialize('refresh_token', refresh_token, {
         httpOnly: false,
         maxAge: 60 * 60 * 24 * 30 // 1 month
+      })
+      ]);
+  }
+
+  removeTokens(res: Response) {
+    res.setHeader('Set-Cookie',
+      [cookie.serialize('access_token', '', {
+        httpOnly: false,
+        maxAge: 0
+      }),
+      cookie.serialize('refresh_token', '', {
+        httpOnly: false,
+        maxAge: 0
       })
       ]);
   }
@@ -130,7 +149,7 @@ class AuthController extends AuthService {
   async refreshToken(req: Request, res: Response): Promise<any> {
     const responser = new Responser(res, 'refreshToken');
     try {
-      const { email: inputEmail } = req.body.user;
+      const { email: inputEmail } = req.user;
       const getUser = await super.getUserByEmail(inputEmail);
       if (!getUser.success) {
         return responser.success(
@@ -173,8 +192,9 @@ class AuthController extends AuthService {
 */
   async logout(req: Request, res: Response): Promise<any> {
     try {
+      super.removeTokens(res);
       return res.send({
-        success: false
+        success: true
       });
     } catch (err) {
       return res.send({
