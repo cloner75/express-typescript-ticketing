@@ -2,6 +2,7 @@ import UserModel from './../schema/user.schema';
 import * as bcrypt from 'bcrypt';
 
 class UserService {
+  constructor() { }
   async signupUser(email: string, password: string, username: string): Promise<any> {
 
     const getUser = await UserModel.exists({
