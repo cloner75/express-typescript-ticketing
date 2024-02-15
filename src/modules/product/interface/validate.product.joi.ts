@@ -38,8 +38,8 @@ export const find = joi.object({
   fields: joi.string().trim(),
   limit: joi.number(),
   skip: joi.number(),
-  sort: joi.string().trim(),
-  order: joi.string().trim().valid('DESC', 'ASC'),
+  sort: joi.number().valid(-1, 1),
+  order: joi.string().trim().valid('_id', 'createdAt', 'updatedAt'),
   page: joi.number(),
   ids: joi.string().trim()
 });
