@@ -8,8 +8,8 @@ const router = Router();
 
 const AuthController = new Auth();
 router.post('/login', validate.validate(login, 'POST'), AuthController.login);
-router.post('/login', validate.validate(logout, 'POST'), AuthController.logout);
 router.post('/signup', validate.validate(signup, 'POST'), AuthController.signup);
+router.post('/logout', AuthController.logout);
 router.post('/refresh',
   Authorization.refreshToken,
   AuthController.refreshToken
