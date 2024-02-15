@@ -29,6 +29,19 @@ class Connection {
       success: false,
       message: `Not Found Route : ${req.path} `
     }));
+
+    this.application.use((err: any, req: Request, res: Response, next: any) => {
+      if (err.status === 400 && 'body' in err) {
+        return res
+          .status(400)
+          .send({
+            status: 404,
+            message: err.message
+          });
+      }
+      next();
+    });
+
   }
 
   verifyConfigs() {
@@ -40,11 +53,11 @@ class Connection {
       throw new Error('set CONNECTION_STRING_DB in env file');
     }
 
-    if(!process.env.JWT_SECRET_KEY){
+    if (!process.env.JWT_SECRET_KEY) {
       throw new Error('set JWT_SECRET_KEY in env file');
     }
 
-    if(!process.env.SALT_ROUNDS){
+    if (!process.env.SALT_ROUNDS) {
       throw new Error('set SALT_ROUNDS in env file');
     }
   }
