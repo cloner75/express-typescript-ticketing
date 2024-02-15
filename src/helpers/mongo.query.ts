@@ -4,7 +4,7 @@ import defaultFields from './../configs/defaultFields';
 const SORT = -1;
 const ORDER_DEFAULT = 'createdAt';
 const LIMIT_DEFAULT = 50;
-const SKIP_DEFAULT = 1;
+const SKIP_DEFAULT = 0;
 const PAGE_DEFAULT = 1;
 const DATE_DEFAULT = '2017-01-01T01:00:00.000Z';
 const ISO_DATE = 'T01:00:00.000Z';
