@@ -6,6 +6,7 @@ const ContactUsSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
+  creator: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
 
 ContactUsSchema.plugin(paginate);
