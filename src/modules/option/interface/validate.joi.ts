@@ -14,7 +14,7 @@ const id: any = {
 
 export const create = joi.object({
   key: joi.string().trim().required(),
-  value: joi.any().required(),
+  values: joi.any().required(),
 });
 
 export const find = joi.object({
@@ -36,7 +36,7 @@ export const findOne = joi.object({
 export const update = joi.object({
   id: id.required,
   key: joi.string().trim().required(),
-  value: joi.any().required(),
+  values: joi.any().required(),
 });
 
 export const remove = joi.object({

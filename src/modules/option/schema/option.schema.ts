@@ -3,7 +3,8 @@ import paginate from 'mongoose-paginate-v2';
 
 const OptionSchema = new mongoose.Schema({
   key: { type: String, required: true },
-  values: { type: mongoose.Schema.Types.Mixed, required: true }
+  values: { type: mongoose.Schema.Types.Mixed, required: true },
+  creator: { type: mongoose.Schema.Types.ObjectId, required: true }
 });
 
 OptionSchema.plugin(paginate);
