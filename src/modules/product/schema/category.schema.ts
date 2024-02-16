@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 
 const CategorySchema = new mongoose.Schema({
-  name: { type: String, required: true }
+  name: { type: String, required: true },
+  creator: { type: mongoose.Schema.Types.ObjectId, required: true }
 });
 
 CategorySchema.plugin(paginate);
