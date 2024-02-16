@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
-import UserService from './../../user/utils/user.service';
+import CommentService from '../utils/comment.service';
+
 import Responser from '../../../helpers/response';
 import httpStatus from 'http-status';
 
-class CommentController extends UserService {
+
+class CommentController extends CommentService {
   constructor() {
     super();
   }
+
   /**
    * 
    * @param req 
@@ -14,14 +17,23 @@ class CommentController extends UserService {
    * @returns 
    */
   async create(req: Request, res: Response): Promise<any> {
-    const sendResponse = new Responser(res, 'login');
+    const sendResponse = new Responser(res, 'comment-create');
     try {
-      const { email } = req.body;
+      const { email, _id: creator } = req.user;
       const getUser = await super.getUserByEmail(email);
       if (!getUser.success) {
-        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE']);
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
       }
-      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getUser.data);
+
+      const getNewComment = await super.createComment(req.body, creator);
+      if (!getNewComment.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewComment.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewComment.data);
     } catch (err) {
       return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
@@ -34,34 +46,32 @@ class CommentController extends UserService {
  * @returns 
  */
   async find(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'comment-find');
     try {
-      const { email, password } = req.body;
-      return res.send({
-        success: false
-      });
+      const getComments = await super.getComment(req.query);
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getComments.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
 
   /**
-* 
-* @param req 
-* @param res 
-* @returns 
-*/
+  * 
+  * @param req 
+  * @param res 
+  * @returns 
+  */
   async findOne(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'comment-findOne');
     try {
-      return res.send({
-        success: false
-      });
+      const getComment = await super.getCommentById(req.params.id);
+      if (!getComment.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE'], getComment.message);
+      }
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getComment.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
@@ -72,14 +82,25 @@ class CommentController extends UserService {
 * @returns 
 */
   async update(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'comment-create');
     try {
-      return res.send({
-        success: false
-      });
+      const { email, _id: creator } = req.user;
+      const getUser = await super.getUserByEmail(email);
+      if (!getUser.success) {
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
+      }
+
+      const getNewComment = await super.updateCommentById(req.params.id, req.body, creator);
+      if (!getNewComment.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewComment.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewComment.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
@@ -91,14 +112,15 @@ class CommentController extends UserService {
 * @returns 
 */
   async delete(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'comment-delete');
     try {
-      return res.send({
-        success: false
-      });
+      const removeComment = await super.removeCommentById(req.params.id);
+      if (!removeComment.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE'], removeComment.message);
+      }
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], removeComment.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 }

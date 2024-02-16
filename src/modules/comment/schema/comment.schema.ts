@@ -4,7 +4,7 @@ import paginate from 'mongoose-paginate-v2';
 const CommentSchema = new mongoose.Schema({
   text: { type: String, required: true },
   productId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  commentId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  commentId: { type: mongoose.Schema.Types.ObjectId, required: false },
   isShow: { type: Boolean, required: true, default: false },
   creator: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
