@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
-import UserService from './../../user/utils/user.service';
+import BlogService from '../utils/blog.service';
+
 import Responser from '../../../helpers/response';
 import httpStatus from 'http-status';
 
-class BlogController extends UserService {
+
+class BlogController extends BlogService {
   constructor() {
     super();
   }
+
   /**
    * 
    * @param req 
@@ -14,14 +17,23 @@ class BlogController extends UserService {
    * @returns 
    */
   async create(req: Request, res: Response): Promise<any> {
-    const sendResponse = new Responser(res, 'login');
+    const sendResponse = new Responser(res, 'blog-create');
     try {
-      const { email } = req.body;
+      const { email, _id: creator } = req.user;
       const getUser = await super.getUserByEmail(email);
       if (!getUser.success) {
-        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE']);
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
       }
-      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getUser.data);
+
+      const getNewBlog = await super.createBlog(req.body, creator);
+      if (!getNewBlog.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewBlog.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewBlog.data);
     } catch (err) {
       return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
@@ -34,34 +46,32 @@ class BlogController extends UserService {
  * @returns 
  */
   async find(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'blog-find');
     try {
-      const { email, password } = req.body;
-      return res.send({
-        success: false
-      });
+      const getBlogs = await super.getBlog(req.query);
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getBlogs.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
 
   /**
-* 
-* @param req 
-* @param res 
-* @returns 
-*/
+  * 
+  * @param req 
+  * @param res 
+  * @returns 
+  */
   async findOne(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'blog-findOne');
     try {
-      return res.send({
-        success: false
-      });
+      const getBlog = await super.getBlogById(req.params.id);
+      if (!getBlog.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE'], getBlog.message);
+      }
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getBlog.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
@@ -72,14 +82,25 @@ class BlogController extends UserService {
 * @returns 
 */
   async update(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'blog-create');
     try {
-      return res.send({
-        success: false
-      });
+      const { email, _id: creator } = req.user;
+      const getUser = await super.getUserByEmail(email);
+      if (!getUser.success) {
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
+      }
+
+      const getNewBlog = await super.updateBlogById(req.params.id, req.body, creator);
+      if (!getNewBlog.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewBlog.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewBlog.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 
@@ -91,14 +112,15 @@ class BlogController extends UserService {
 * @returns 
 */
   async delete(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'blog-delete');
     try {
-      return res.send({
-        success: false
-      });
+      const removeBlog = await super.removeBlogById(req.params.id);
+      if (!removeBlog.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE'], removeBlog.message);
+      }
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], removeBlog.data);
     } catch (err) {
-      return res.send({
-        err: 'err.message'
-      });
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
     }
   }
 }
