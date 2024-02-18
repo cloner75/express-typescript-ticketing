@@ -34,6 +34,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.1",
     "mongoose-paginate-v2": "^1.8.0",
-    "mongoose-timestamp": "^0.6.0"
+    "mongoose-timestamp": "^0.6.0",
+    "strong-soap": "^4.0.1"
   }
 }
