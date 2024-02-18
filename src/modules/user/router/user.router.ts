@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import User from '../controller/user.controller';
 import Validator from './../../../helpers/validator';
-import { create, find, findOne, update, remove } from './../interface/validate.joi';
+import { user } from './../interface/validate.joi';
+const { create, find, findOne, update, remove } = user;
+
 import authorization from './../../../helpers/authorization';
 
 const validate = new Validator('user_service');
