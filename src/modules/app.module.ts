@@ -6,8 +6,9 @@ import contactUsModule from './contactUs/contactUs.module';
 import customerModule from './customer/customer.module';
 import optionModule from './option/option.module';
 import { product, category, brand } from './product/product.module';
+
 import ticketModule from './ticket/ticket.module';
-import userModule from './user/user.module';
+import { user, role, permission } from './user/user.module';
 import walletModule from './wallet/wallet.module';
 
 export default [
@@ -36,8 +37,16 @@ export default [
     router: ticketModule.routes
   },
   {
-    prefix: userModule.prefix,
-    router: userModule.routes
+    prefix: user.prefix,
+    router: user.routes
+  },
+  {
+    prefix: role.prefix,
+    router: role.routes
+  },
+  {
+    prefix: permission.prefix,
+    router: permission.routes
   },
   {
     prefix: authModule.prefix,
