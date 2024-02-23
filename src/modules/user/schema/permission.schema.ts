@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 
 const PermissionSchema = new mongoose.Schema({
-  roleId: { required: true, type: String },
+  roleId: { required: true, type: mongoose.Schema.Types.ObjectId },
   access: [
     {
       service: { required: true, type: String },
