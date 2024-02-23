@@ -12,8 +12,10 @@ const id: any = {
     .pattern(/^[0-9a-fA-F]{24}$/)
 };
 
+
+
+
 export const create = joi.object({
-  name: joi.string().trim().required(),
   subject: joi.string().trim().required(),
   request: joi.string().trim().required(),
   seen: joi.boolean().required(),
@@ -22,7 +24,7 @@ export const create = joi.object({
     type: joi.string().trim().valid('customer', 'operator').required(),
     text: joi.string().trim().required(),
     seen: joi.boolean().required()
-  })).required()
+  }))
 });
 
 export const find = joi.object({
