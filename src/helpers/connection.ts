@@ -1,10 +1,12 @@
 import { Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import appModules from './../modules/app.module';
+import DataSeeder from './seeder';
 
 class Connection {
   application: Express | any;
   express: any;
+
   constructor(app: Express | any) {
     this.express = app;
     this.application = app();
@@ -90,6 +92,7 @@ class Connection {
       console.log("🚀 ~ Connection ~ startup ~ process.env.PORT:", process.env.PORT);
       this.nodeEvents();
       this.mongoConnection();
+      new DataSeeder();
     });
   }
 }
