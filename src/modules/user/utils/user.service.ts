@@ -26,7 +26,7 @@ class UserService {
       email: email.toLowerCase(),
       password: hash,
       salt,
-      role: 'admin',
+      role: 'user',
     });
 
     return {
