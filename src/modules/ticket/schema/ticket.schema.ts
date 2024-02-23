@@ -5,7 +5,7 @@ const TicketSchema = new mongoose.Schema({
   status: { required: true, type: Number, default: 1, enum: [] },
   subject: { required: true, type: String },
   request: { required: true, type: String },
-  customerId: { required: true, type: mongoose.Schema.Types.ObjectId },
+  creator: { required: true, type: mongoose.Schema.Types.ObjectId },
   seen: { required: true, type: Boolean, default: false },
   responses: [{
     text: { required: true, type: String },
