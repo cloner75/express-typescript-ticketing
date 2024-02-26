@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import PermissionModel from './../modules/user/schema/permission.schema';
+import * as permissions from './../configs/permissions';
 import RoleModel from './../modules/user/schema/role.schema';
 import UserModel from './../modules/user/schema/user.schema';
 import bcrypt from 'bcrypt';
@@ -63,7 +64,7 @@ export default class DataSeeder {
     ]);
   }
 
-  
+
   async createRole() {
     try {
       const roles = await RoleModel.create(ROLE);
@@ -77,16 +78,17 @@ export default class DataSeeder {
 
   async createPermission() {
     try {
+      const adminPermissions = Object.keys(permissions).map((item: string, index) => {
+        return {
+          service: item,
+          methods: Object.values(permissions[item as keyof typeof permissions])
+        };
+      });
       await PermissionModel.create([
         {
           roleId: this.adminRoleId,
           creator: CREATOR.id,
-          access: [
-            {
-              service: 'product',
-              methods: ['find', 'findOne', 'update', 'delete']
-            }
-          ]
+          access: adminPermissions
         },
         {
           roleId: this.userRoleId,
