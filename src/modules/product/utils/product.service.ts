@@ -17,9 +17,14 @@ class ProductService extends UserService {
    */
   async createProduct(inputData: any, creator: string): Promise<any> {
     try {
-      const newProduct = await ProductModel.create({ ...inputData, creator });
+      const newProduct = await ProductModel.create({
+        ...inputData,
+        slug: inputData.slug.replaceAll(' ', '-'),
+        creator
+      });
       return responser.serviceResponse(true, 'isOK', newProduct);
     } catch (err: any) {
+      console.log("🚀 ~ ProductService ~ createProduct ~ err:", err);
       return responser.serviceResponse(false, 'can not create product');
     }
   }

@@ -15,30 +15,31 @@ const router = Router();
 const ProductController = new Product();
 router.post('/',
   authorization.authorization,
-  validate.validate(create, product.create),
+  role.access(product.create),
+  validate.validate(create, 'POST'),
   ProductController.create
 );
 router.get('/',
   authorization.authorization,
-  validate.validate(create, product.find),
+  role.access(product.find),
   validate.validate(find, 'GET'),
   ProductController.find
 );
 router.get('/:id',
   authorization.authorization,
-  validate.validate(create, product.findOne),
+  role.access(product.findOne),
   validate.validate(findOne, 'GET'),
   ProductController.findOne
 );
 router.put('/:id',
   authorization.authorization,
-  validate.validate(create, product.update),
+  role.access(product.update),
   validate.validate(update, 'PUT'),
   ProductController.update
 );
 router.delete('/:id',
   authorization.authorization,
-  validate.validate(create, product.delete),
+  role.access(product.delete),
   validate.validate(remove, 'DELETE'),
   ProductController.delete
 );

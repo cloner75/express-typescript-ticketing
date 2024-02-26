@@ -82,7 +82,7 @@ class ProductController extends ProductService {
 * @returns 
 */
   async update(req: Request, res: Response): Promise<any> {
-    const sendResponse = new Responser(res, 'product-create');
+    const sendResponse = new Responser(res, 'product-update');
     try {
       const { email, _id: creator } = req.user;
       const getUser = await super.getUserByEmail(email);

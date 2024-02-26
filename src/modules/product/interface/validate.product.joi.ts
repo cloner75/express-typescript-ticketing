@@ -16,6 +16,7 @@ const id: any = {
 export const create = joi.object({
   name: joi.string().trim().required(),
   title: joi.string().trim().required(),
+  cover: joi.string().trim().required(),
   description: joi.string().trim().required(),
   slug: joi.string().trim().required(),
   colers: joi.array().items(joi.string().trim().required()).required(),
@@ -55,6 +56,7 @@ export const update = joi.object({
   name: joi.string().trim().required(),
   title: joi.string().trim().required(),
   description: joi.string().trim().required(),
+  conver: joi.string().trim().required(),
   slug: joi.string().trim().required(),
   colers: joi.array().items(joi.string().trim().required()).required(),
   images: joi.array().items(joi.string().trim().required()).required(),
