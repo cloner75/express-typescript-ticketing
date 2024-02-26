@@ -1,10 +1,15 @@
 import { Request, Response, response } from 'express';
 import * as cookie from 'cookie';
 import UserService from './../../user/utils/user.service';
+import PermissionService from '../../user/utils/permission.service';
+import RoleService from '../../user/utils/role.service';
+
 import Responser from '../../../helpers/response';
 import httpStatus from 'http-status';
 import jwt from './../../../helpers/jsonwebtoken';
 import * as bcrypt from 'bcrypt';
+
+const permissionService = new PermissionService();
 
 declare namespace Express {
   export interface Request {
@@ -69,12 +74,19 @@ class AuthController extends AuthService {
         return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE']);
       }
       const { _id, username, email, createdAt, role } = getUser.data;
+      const getPermission = await permissionService.getPermissionByName(role);
+
+      if (!getPermission.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE']);
+      }
+
       super.setTokens(res, {
         _id,
         username,
         email,
         createdAt,
-        role
+        role,
+        permissions: getPermission.data
       });
       return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], {
         _id,
