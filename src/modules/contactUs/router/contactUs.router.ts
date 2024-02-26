@@ -7,7 +7,7 @@ import RoleBase from '../../../helpers/role';
 import { contactUs } from '../../../configs/permissions';
 
 const validate = new Validator('contact_us_service');
-const role = new RoleBase('contact');
+const role = new RoleBase('contactUs');
 const router = Router();
 
 const ContactUsController = new ContactUs();

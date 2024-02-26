@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 
 const ContactUsSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  fullname: { type: String, required: true },
   phone: { type: String, required: true },
-  title: { type: String, required: true },
   content: { type: String, required: true },
+  status: { type: Number, required: true, default: 0 },
   creator: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
 

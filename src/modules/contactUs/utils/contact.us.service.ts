@@ -17,7 +17,7 @@ class ContactUsService extends UserService {
    */
   async createContactUs(inputData: any, creator: string): Promise<any> {
     try {
-      const newContactUs = await ContactUsModel.create({ ...inputData, creator });
+      const newContactUs = await ContactUsModel.create({ ...inputData, status: 0, creator });
       return responser.serviceResponse(true, 'isOK', newContactUs);
     } catch (err: any) {
       return responser.serviceResponse(false, 'can not create contactUs');
