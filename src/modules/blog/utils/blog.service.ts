@@ -17,7 +17,12 @@ class BlogService extends UserService {
    */
   async createBlog(inputData: any, creator: string): Promise<any> {
     try {
-      const newBlog = await BlogModel.create({ ...inputData, creator });
+      const newBlog = await BlogModel.create({
+        ...inputData,
+        subContent: inputData.content.substr(0, 255),
+        slug: inputData.slug.replaceAll(' ', '-'),
+        creator
+      });
       return responser.serviceResponse(true, 'isOK', newBlog);
     } catch (err: any) {
       return responser.serviceResponse(false, 'can not create blog');
@@ -59,7 +64,14 @@ class BlogService extends UserService {
 
   async updateBlogById(id: string, updatedFields: any, creator: string) {
     try {
-      const updateFields = await BlogModel.updateOne({ _id: id }, { $set: { ...updatedFields, creator } });
+      const updateFields = await BlogModel.updateOne({ _id: id }, {
+        $set: {
+          ...updatedFields,
+          subContent: updatedFields.content.substr(0, 255),
+          slug: updatedFields.slug.replaceAll(' ', '-'),
+          creator
+        }
+      });
       if (!updateFields || !updateFields.modifiedCount || !updateFields.acknowledged) {
         return responser.serviceResponse(false, 'blog not found');
       }

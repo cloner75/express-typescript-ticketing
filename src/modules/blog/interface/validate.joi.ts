@@ -15,7 +15,8 @@ export const create = joi.object({
   content: joi.string().trim().required(),
   title: joi.string().trim().required(),
   slug: joi.string().trim().required(),
-  images: joi.string().trim().required(),
+  images: joi.array().required(),
+  cover: joi.string().trim().required()
 });
 
 export const find = joi.object({
@@ -40,7 +41,8 @@ export const update = joi.object({
   content: joi.string().trim().required(),
   title: joi.string().trim().required(),
   slug: joi.string().trim().required(),
-  images: joi.string().trim().required(),
+  images: joi.array().required(),
+  cover: joi.string().trim().required(),
 });
 
 export const remove = joi.object({
