@@ -57,6 +57,24 @@ class PermissionService extends UserService {
     }
   }
 
+  /**
+ * 
+ * @param id 
+ * @returns 
+ */
+  async getPermissionByName(name: string) {
+    try {
+      const findOnePermission = await PermissionModel.findOne({ name });
+      if (!findOnePermission) {
+        return responser.serviceResponse(false, 'permission not found');
+      }
+      return responser.serviceResponse(true, 'isOK', findOnePermission);
+    } catch (err) {
+      return responser.serviceResponse(false, 'can not get permission');
+    }
+  }
+
+
   async updatePermissionById(id: string, updatedFields: any, creator: string) {
     try {
       const updateFields = await PermissionModel.updateOne({ _id: id }, { $set: { ...updatedFields, creator } });
