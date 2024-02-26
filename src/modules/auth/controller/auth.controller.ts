@@ -66,6 +66,7 @@ class AuthController extends AuthService {
     try {
       const { email: inputEmail, password } = req.body;
       const getUser = await super.getUserByEmail(inputEmail);
+
       if (!getUser.success) {
         return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE']);
       }
@@ -86,14 +87,15 @@ class AuthController extends AuthService {
         email,
         createdAt,
         role,
-        permissions: getPermission.data
+        permissions: getPermission.data.access
       });
       return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], {
         _id,
         username,
         email,
         createdAt,
-        role
+        role,
+        permissions: getPermission.data.access
       });
     } catch (err) {
       return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);

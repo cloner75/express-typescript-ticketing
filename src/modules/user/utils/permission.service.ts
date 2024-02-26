@@ -2,6 +2,7 @@ import PermissionModel from '../schema/permission.schema';
 import MongoQuery from '../../../helpers/mongo.query';
 import responser from '../../../helpers/response';
 import UserService from './user.service';
+import RoleModel from '../schema/role.schema';
 
 
 class PermissionService extends UserService {
@@ -64,7 +65,11 @@ class PermissionService extends UserService {
  */
   async getPermissionByName(name: string) {
     try {
-      const findOnePermission = await PermissionModel.findOne({ name });
+      const findOneRole = await RoleModel.findOne({ name });
+      if (!findOneRole) {
+        return responser.serviceResponse(false, 'role not found');
+      }
+      const findOnePermission = await PermissionModel.findOne({ roleId: findOneRole._id });
       if (!findOnePermission) {
         return responser.serviceResponse(false, 'permission not found');
       }
