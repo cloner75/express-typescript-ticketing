@@ -4,7 +4,14 @@ import * as permissions from './../configs/permissions';
 import RoleModel from './../modules/user/schema/role.schema';
 import UserModel from './../modules/user/schema/user.schema';
 import bcrypt from 'bcrypt';
+import CategoryModel from '../modules/product/schema/category.schema';
+import BrandModel from '../modules/product/schema/brand.schema';
+import ProductModel from '../modules/product/schema/product.schema';
+import { fa, Faker } from '@faker-js/faker';
 
+const faker = new Faker({
+  locale: [fa],
+});
 const CREATOR = {
   id: new mongoose.Types.ObjectId(),
   password: 'AriaAdmin'
@@ -48,7 +55,11 @@ export default class DataSeeder {
                   this
                     .createAdmin()
                     .then(_user => {
-                      console.log("🚀 ~ DataSeeder ~ Create ~ Data");
+                      this
+                        .createProduct()
+                        .then(_product => {
+                          console.log("🚀 ~ DataSeeder ~ Create ~ Data");
+                        });
                     });
                 });
             });
@@ -61,6 +72,9 @@ export default class DataSeeder {
       RoleModel.deleteMany({}),
       PermissionModel.deleteMany({}),
       UserModel.deleteMany({}),
+      CategoryModel.deleteMany({}),
+      BrandModel.deleteMany({}),
+      ProductModel.deleteMany({}),
     ]);
   }
 
@@ -118,6 +132,89 @@ export default class DataSeeder {
       });
     } catch (err) {
       console.log("🚀 ~ DataSeeder ~ createAdmin ~ err:", err);
+    }
+  }
+
+  async createProduct() {
+    try {
+
+      const createCategories = await CategoryModel.create([
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        }
+      ]);
+      const createBrands = await BrandModel.create([
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        },
+        {
+          name: faker.person.firstName(),
+          creator: this.adminRoleId
+        }
+      ]);
+      const createProduct = [];
+      for (let i = 0; i < 20; i++) {
+        const random = Math.floor(Math.random() * createCategories.length);
+        createProduct.push({
+          "name": faker.person.firstName(),
+          "title": faker.person.fullName(),
+          "cover": faker.image.avatarGitHub(),
+          "description": faker.person.fullName(),
+          "slug": faker.person.fullName(),
+          "colers": [
+            faker.color.rgb(),
+            faker.color.rgb(),
+            faker.color.rgb(),
+            faker.color.rgb(),
+          ],
+          "images": [
+            faker.image.avatarGitHub(),
+            faker.image.avatarGitHub(),
+            faker.image.avatarGitHub(),
+            faker.image.avatarGitHub(),
+          ],
+          "options": [{
+            "key": faker.person.firstName(),
+            "value": faker.person.lastName()
+          }],
+          "brandId": createBrands[random]._id,
+          "categoryId": createCategories[random]._id,
+          creator: this.adminRoleId
+        });
+      }
+      await ProductModel.create(createProduct);
+    } catch (err) {
+      console.log("🚀 ~ DataSeeder ~ createProduct ~ err:", err);
     }
   }
 }
