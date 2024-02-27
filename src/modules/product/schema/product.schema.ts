@@ -13,9 +13,9 @@ const ProductSchema = new mongoose.Schema({
     key: { type: String, required: true },
     value: { type: String, required: true }
   }],
-  brandId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  categoryId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  creator: { type: mongoose.Schema.Types.ObjectId, required: true },
+  brandId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'brands' },
+  categoryId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'categories' },
+  creator: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'users' },
 });
 
 ProductSchema.plugin(paginate);

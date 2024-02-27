@@ -38,9 +38,12 @@ class ProductService extends UserService {
     try {
       const { options, where } = MongoQuery.initialMongoQuery(inputWhere, 'product');
       const { select: projection, ...otherOptions } = options;
-      const findByQuery = await ProductModel.find(where, projection, { ...otherOptions });
+      const findByQuery = await ProductModel
+        .find(where, projection, { ...otherOptions })
+        .populate(['categoryId', 'brandId', 'creator']);
       return responser.serviceResponse(true, 'isOK', findByQuery);
     } catch (err) {
+      console.log("🚀 ~ ProductService ~ getProduct ~ err:", err);
       return responser.serviceResponse(false, 'can not get products');
     }
   }
