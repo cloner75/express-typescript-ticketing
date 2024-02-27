@@ -11,6 +11,12 @@ const role = new RoleBase('option');
 const router = Router();
 
 const OptionController = new Option();
+
+router.get('/public',
+  validate.validate(find, 'GET'),
+  OptionController.find
+);
+
 router.post('/',
   authorization.authorization,
   role.access(option.create),
