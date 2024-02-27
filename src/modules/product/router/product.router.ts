@@ -13,6 +13,14 @@ const role = new RoleBase('product');
 const router = Router();
 
 const ProductController = new Product();
+
+// public routes
+router.get(
+  '/public',
+  validate.validate(find, 'GET'),
+  ProductController.find
+);
+
 router.post('/',
   authorization.authorization,
   role.access(product.create),
