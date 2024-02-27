@@ -24,7 +24,6 @@ class ProductService extends UserService {
       });
       return responser.serviceResponse(true, 'isOK', newProduct);
     } catch (err: any) {
-      console.log("🚀 ~ ProductService ~ createProduct ~ err:", err);
       return responser.serviceResponse(false, 'can not create product');
     }
   }
@@ -55,7 +54,10 @@ class ProductService extends UserService {
    */
   async getProductById(id: string) {
     try {
-      const findOneProduct = await ProductModel.findOne({ _id: id });
+      const findOneProduct = await ProductModel
+        .findOne({ _id: id })
+        .populate(['categoryId', 'brandId', 'creator']);
+        
       if (!findOneProduct) {
         return responser.serviceResponse(false, 'product not found');
       }
