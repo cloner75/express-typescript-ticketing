@@ -26,6 +26,6 @@ const ComplaintSchema = new mongoose.Schema({
 ComplaintSchema.plugin(paginate);
 ComplaintSchema.plugin(require('mongoose-timestamp'));
 
-const OptionModel = mongoose.model('complaints', ComplaintSchema);
+const ComplaintModel = mongoose.model('complaints', ComplaintSchema);
 
-export default OptionModel;
+export default ComplaintModel;
