@@ -10,8 +10,13 @@ import ticketModule from './ticket/ticket.module';
 import { user, role, permission } from './user/user.module';
 import walletModule from './wallet/wallet.module';
 import complaintModule from './complaint/complaint.module';
+import surveyModule from './survey/survey.module';
 
 export default [
+  {
+    prefix: surveyModule.prefix,
+    router: surveyModule.routes
+  },
   {
     prefix: complaintModule.prefix,
     router: complaintModule.routes
