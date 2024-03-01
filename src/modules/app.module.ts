@@ -11,8 +11,13 @@ import { user, role, permission } from './user/user.module';
 import walletModule from './wallet/wallet.module';
 import complaintModule from './complaint/complaint.module';
 import surveyModule from './survey/survey.module';
+import cooperationModule from './cooperation/cooperation.module';
 
 export default [
+  {
+    prefix: cooperationModule.prefix,
+    router: cooperationModule.routes
+  },
   {
     prefix: surveyModule.prefix,
     router: surveyModule.routes
