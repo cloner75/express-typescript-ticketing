@@ -6,12 +6,16 @@ import contactUsModule from './contactUs/contactUs.module';
 import customerModule from './customer/customer.module';
 import optionModule from './option/option.module';
 import { product, category, brand } from './product/product.module';
-
 import ticketModule from './ticket/ticket.module';
 import { user, role, permission } from './user/user.module';
 import walletModule from './wallet/wallet.module';
+import complaintModule from './complaint/complaint.module';
 
 export default [
+  {
+    prefix: complaintModule.prefix,
+    router: complaintModule.routes
+  },
   {
     prefix: optionModule.prefix,
     router: optionModule.routes
