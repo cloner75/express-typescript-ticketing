@@ -8,6 +8,7 @@ import CategoryModel from '../modules/product/schema/category.schema';
 import BrandModel from '../modules/product/schema/brand.schema';
 import ProductModel from '../modules/product/schema/product.schema';
 import { fa, Faker } from '@faker-js/faker';
+import OptionModel from '../modules/option/schema/option.schema';
 
 const faker = new Faker({
   locale: [fa],
@@ -46,6 +47,8 @@ export default class DataSeeder {
       this
         .flushDB()
         .then(_flushed => {
+          this.createSettings()
+            .then();
           this
             .createRole()
             .then(_role => {
@@ -215,6 +218,43 @@ export default class DataSeeder {
       await ProductModel.create(createProduct);
     } catch (err) {
       console.log("🚀 ~ DataSeeder ~ createProduct ~ err:", err);
+    }
+  }
+
+  async createSettings() {
+    try {
+      await OptionModel.updateOne({
+        key: 'settings'
+      }, {
+        "values": {
+          "Generals": {
+            "SiteTitle": "آریاکیش مرکز ارائه گارانتی خدمات پس از فروش لوازم خانگی",
+            "TagLine": "به سایت رسمی آریاکیش مرکز ارائه گارانتی و خدمات پس از فروش لوازم خانگی خوش آمدی",
+            "CustomerContact": "02186780",
+            "CompanyTel": "1882",
+            "MobileWhatsapp": "09121779471",
+            "EmailAddress": "info@ariakish.com",
+            "WorkingTime": "9 صبح الی 5 بعد ازظهر وپنچ شنبه ها 9 صبح الی 13",
+            "LogoPath": "https://ariakish.com/fav-ariakish.png",
+            "SmsNumber": "100086780"
+          },
+          "SocialMedia": {
+            "TelegramUrl": "https://ariakish.com/fav-ariakish.png",
+            "WhatsappUrl": "https://ariakish.com/fav-ariakish.png",
+            "Email": "touriyan1882@yahoo.com"
+          },
+          "Portals": {
+            "SellerUrl": "https://seller.ariakish.com/login",
+            "ClubUrl": "https://club.ariakish.com/login",
+            "InquiryUrl": "https://seller.ariakish.com/",
+            "PoliciesUrl": "https://seller.ariakish.com/page/g/atlaaaat-drmord-shrayt-o-doabt-garanty"
+          }
+        }
+      }, {
+        upsert: true
+      });
+    } catch (err) {
+
     }
   }
 }
