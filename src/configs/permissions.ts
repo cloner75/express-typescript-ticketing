@@ -117,3 +117,20 @@ export const wallet = {
   update: 'update',
   delete: 'delete',
 };
+
+
+export const complaint = {
+  create: 'create',
+  find: 'find',
+  findOne: 'findOne',
+  update: 'update',
+  delete: 'delete',
+};
+
+export const survay = {
+  create: 'create',
+  find: 'find',
+  findOne: 'findOne',
+  update: 'update',
+  delete: 'delete',
+};
