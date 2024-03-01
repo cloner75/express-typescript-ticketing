@@ -134,3 +134,11 @@ export const survay = {
   update: 'update',
   delete: 'delete',
 };
+
+export const cooperation = {
+  create: 'create',
+  find: 'find',
+  findOne: 'findOne',
+  update: 'update',
+  delete: 'delete',
+};
