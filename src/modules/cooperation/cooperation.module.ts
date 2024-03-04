@@ -1,4 +1,4 @@
-import routes from './router/survey.router';
+import routes from './router/cooperation.router';
 
 export default {
   prefix: '/cooperation',
