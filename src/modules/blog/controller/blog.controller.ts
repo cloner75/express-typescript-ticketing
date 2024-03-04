@@ -55,6 +55,24 @@ class BlogController extends BlogService {
     }
   }
 
+  /**
+ * 
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+  async publicFindBySlug(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'blog-publicFindBySlug');
+    try {
+      const getBlog = await super.getBlogBySlug(req.params.slug);
+      if (!getBlog.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE'], getBlog.message);
+      }
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getBlog.data);
+    } catch (err) {
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+    }
+  }
 
   /**
   * 

@@ -15,8 +15,9 @@ export const create = joi.object({
   content: joi.string().trim().required(),
   title: joi.string().trim().required(),
   slug: joi.string().trim().required(),
-  images: joi.array().required(),
-  cover: joi.string().trim().required()
+  image: joi.string().trim().uri().required(),
+  video: joi.string().trim().uri(),
+  type: joi.string().trim().valid('blog', 'article', 'product', 'video').required(),
 });
 
 export const find = joi.object({
@@ -36,13 +37,18 @@ export const findOne = joi.object({
   id: id.required,
 });
 
+export const findBySlug = joi.object({
+  slug: joi.string().trim().required()
+});
+
 export const update = joi.object({
   id: id.required,
   content: joi.string().trim().required(),
   title: joi.string().trim().required(),
   slug: joi.string().trim().required(),
-  images: joi.array().required(),
-  cover: joi.string().trim().required(),
+  image: joi.string().trim().uri().required(),
+  video: joi.string().trim().uri(),
+  type: joi.string().trim().valid('blog', 'article', 'product', 'video').required(),
 });
 
 export const remove = joi.object({

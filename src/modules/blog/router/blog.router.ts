@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Blog from './../controller/blog.controller';
 import Validator from './../../../helpers/validator';
-import { create, find, findOne, update, remove } from './../interface/validate.joi';
+import { create, find, findOne, update, remove ,findBySlug} from './../interface/validate.joi';
 import RoleBase from '../../../helpers/role';
 import { blog } from '../../../configs/permissions';
 import authorization from './../../../helpers/authorization';
@@ -12,6 +12,12 @@ const role = new RoleBase('blog');
 const router = Router();
 
 const BlogController = new Blog();
+
+router.get('/public/:slug',
+  validate.validate(findBySlug, 'GET'),
+  BlogController.publicFindBySlug
+);
+
 router.post('/',
   authorization.authorization,
   role.access(blog.create),

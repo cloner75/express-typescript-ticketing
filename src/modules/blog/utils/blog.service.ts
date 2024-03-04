@@ -62,6 +62,22 @@ class BlogService extends UserService {
     }
   }
 
+
+  async getBlogBySlug(slug: string) {
+    try {
+      const findOneBlog = await BlogModel.findOne({ slug });
+      if (!findOneBlog) {
+        return responser.serviceResponse(false, 'blog not found');
+      }
+      let increment = findOneBlog.countView ? ++findOneBlog.countView : 1;
+      await BlogModel.updateOne({ _id: findOneBlog._id }, { countView: increment });
+
+      return responser.serviceResponse(true, 'isOK', findOneBlog);
+    } catch (err) {
+      return responser.serviceResponse(false, 'can not get blog');
+    }
+  }
+
   async updateBlogById(id: string, updatedFields: any, creator: string) {
     try {
       const updateFields = await BlogModel.updateOne({ _id: id }, {

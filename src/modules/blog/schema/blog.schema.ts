@@ -6,8 +6,10 @@ const BlogSchema = new mongoose.Schema({
   subContent: { type: String, required: true },
   title: { type: String, required: true },
   slug: { type: String, required: true },
-  cover: { type: String, required: true },
-  images: { type: Array, required: true },
+  image: { type: String, required: true },
+  video: { type: String, required: false },
+  type: { type: String, required: true, default: 'blog' },
+  countView: { type: Number, required: true, default: 0 },
   creator: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
 
