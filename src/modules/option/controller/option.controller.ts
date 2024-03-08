@@ -76,11 +76,30 @@ class OptionController extends OptionService {
   }
 
   /**
-* 
-* @param req 
-* @param res 
-* @returns 
-*/
+  * 
+  * @param req 
+  * @param res 
+  * @returns 
+  */
+  async findByKey(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'option-findByKey');
+    try {
+      const getOption = await super.getOptionByKey(req.params.key, req.query);
+      if (!getOption.success) {
+        return sendResponse.success(false, httpStatus.NO_CONTENT, httpStatus['204_MESSAGE'], getOption.message);
+      }
+      return sendResponse.success(true, httpStatus.OK, httpStatus['200_MESSAGE'], getOption.data);
+    } catch (err) {
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+    }
+  }
+
+  /**
+  * 
+  * @param req 
+  * @param res 
+  * @returns 
+  */
   async update(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'option-create');
     try {

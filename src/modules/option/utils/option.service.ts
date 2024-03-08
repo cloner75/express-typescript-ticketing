@@ -20,7 +20,6 @@ class OptionService extends UserService {
       const newOption = await OptionModel.create({ ...inputData, creator });
       return responser.serviceResponse(true, 'isOK', newOption);
     } catch (err: any) {
-      console.log("🚀 ~ OptionService ~ createOption ~ err:", err)
       return responser.serviceResponse(false, 'can not create option');
     }
   }
@@ -36,6 +35,26 @@ class OptionService extends UserService {
       const { select: projection, ...otherOptions } = options;
       const findByQuery = await OptionModel.find(where, projection, otherOptions);
       return responser.serviceResponse(true, 'isOK', findByQuery);
+    } catch (err) {
+      return responser.serviceResponse(false, 'can not get options');
+    }
+  }
+
+
+  /**
+   * 
+   * @param inputWhere 
+   * @returns 
+   */
+  async getOptionByKey(key: string, query: any): Promise<any> {
+    try {
+      const { options, where } = MongoQuery.initialMongoQuery(query, 'option');
+      const { select: projection, ...otherOptions } = options;
+      const findByKey = await OptionModel.findOne({ key }, projection, otherOptions);
+      if (!findByKey) {
+        return responser.serviceResponse(false, 'option not found');
+      }
+      return responser.serviceResponse(true, 'isOK', findByKey);
     } catch (err) {
       return responser.serviceResponse(false, 'can not get options');
     }

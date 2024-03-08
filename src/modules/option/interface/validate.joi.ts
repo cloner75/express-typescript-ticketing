@@ -29,8 +29,15 @@ export const find = joi.object({
   ids: joi.string().trim()
 });
 
+export const findByKey = joi.object({
+  key: joi.string().trim().required(),
+  fields: joi.string().trim(),
+});
+
+
 export const findOne = joi.object({
   id: id.required,
+  fields: joi.string().trim(),
 });
 
 export const update = joi.object({

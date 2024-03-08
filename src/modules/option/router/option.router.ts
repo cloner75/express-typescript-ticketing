@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Option from '../controller/option.controller';
 import Validator from './../../../helpers/validator';
-import { create, find, findOne, update, remove } from './../interface/validate.joi';
+import { create, find, findOne, update, remove, findByKey } from './../interface/validate.joi';
 import authorization from './../../../helpers/authorization';
 import RoleBase from '../../../helpers/role';
 import { option } from '../../../configs/permissions';
@@ -15,6 +15,11 @@ const OptionController = new Option();
 router.get('/public',
   validate.validate(find, 'GET'),
   OptionController.find
+);
+
+router.get('/public/:key',
+  validate.validate(findByKey, 'GET'),
+  OptionController.findByKey
 );
 
 router.post('/',
