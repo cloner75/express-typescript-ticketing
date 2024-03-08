@@ -35,15 +35,15 @@ const CooperationSchema = new mongoose.Schema({
   visionDescribe: { type: String, required: true },
   firstWorkDate: { type: Date, required: true },
   insuranceNumber: { type: String, required: true },
-  companyName: { type: String, required: true },
-  post: { type: String, required: true },
-  lastSalary: { type: String, required: true },
-  employersPhone: { type: String, required: true },
-  reasonLiving: { type: String, required: true },
-  atDateWork: { type: String, required: true },
-  untilDateWork: { type: String, required: true },
-  
-
+  history: [{
+    companyName: { type: String, required: true },
+    post: { type: String, required: true },
+    lastSalary: { type: String, required: true },
+    employersPhone: { type: String, required: true },
+    reasonLiving: { type: String, required: true },
+    atDateWork: { type: String, required: true },
+    untilDateWork: { type: String, required: true }
+  }],
   creator: { type: Schema.Types.ObjectId, required: false }
 });
 
