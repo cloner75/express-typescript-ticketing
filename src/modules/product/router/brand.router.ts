@@ -11,12 +11,19 @@ const role = new RoleBase('brand');
 const router = Router();
 
 const BrandController = new Brand();
+
+router.get('/public',
+  validate.validate(find, 'GET'),
+  BrandController.find
+);
+
 router.post('/',
   authorization.authorization,
   role.access(brand.create),
   validate.validate(create, 'POST'),
   BrandController.create
 );
+
 router.get('/',
   authorization.authorization,
   role.access(brand.find),

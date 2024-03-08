@@ -11,6 +11,12 @@ const role = new RoleBase('category');
 const router = Router();
 
 const CategoryController = new Category();
+
+router.get('/public',
+  validate.validate(find, 'GET'),
+  CategoryController.find
+);
+
 router.post('/',
   authorization.authorization,
   role.access(category.create),
