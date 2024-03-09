@@ -12,8 +12,13 @@ import walletModule from './wallet/wallet.module';
 import complaintModule from './complaint/complaint.module';
 import surveyModule from './survey/survey.module';
 import cooperationModule from './cooperation/cooperation.module';
+import forumModule from './forum/forum.module';
 
 export default [
+  {
+    prefix: forumModule.prefix,
+    router: forumModule.routes
+  },
   {
     prefix: cooperationModule.prefix,
     router: cooperationModule.routes

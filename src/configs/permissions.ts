@@ -6,6 +6,15 @@ export const product = {
   delete: 'delete',
 };
 
+export const forum = {
+  create: 'create',
+  find: 'find',
+  findOne: 'findOne',
+  update: 'update',
+  delete: 'delete',
+  updateStatus: 'updateStatus'
+};
+
 export const category = {
   create: 'create',
   find: 'find',

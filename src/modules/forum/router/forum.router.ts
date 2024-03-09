@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Complaint from '../controller/forum.controller';
 import Validator from '../../../helpers/validator';
-import { create, find, findOne, update, remove } from '../interface/validate.joi';
+import { create, find, findOne, update, remove, updateLike, updateStatus, createReply } from '../interface/validate.joi';
 import authorization from '../../../helpers/authorization';
 import RoleBase from '../../../helpers/role';
 import { forum } from '../../../configs/permissions';
@@ -17,6 +17,11 @@ const ComplaintController = new Complaint();
 router.post('/public',
   validate.validate(create, 'POST'),
   ComplaintController.createPublic
+);
+
+router.post('/public/reply',
+  validate.validate(createReply, 'POST'),
+  ComplaintController.createPublicReply
 );
 
 
@@ -45,6 +50,20 @@ router.get('/:id',
   role.access(forum.findOne),
   validate.validate(findOne, 'GET'),
   ComplaintController.findOne
+);
+
+router.put('/status/:id',
+  authorization.authorization,
+  role.access(forum.updateStatus),
+  validate.validate(updateStatus, 'PUT'),
+  ComplaintController.updateStatus
+);
+
+router.put('/like/:id',
+  authorization.authorization,
+  role.access(forum.updateStatus),
+  validate.validate(updateLike, 'PUT'),
+  ComplaintController.updateLike
 );
 
 router.put('/:id',

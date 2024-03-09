@@ -2,28 +2,28 @@ import mongoose, { Schema } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 
 const ForumsSchema = new mongoose.Schema({
-  fullname: { type: String, required: true },
-  nationalCode: { type: String, required: true },
-  phone: { type: String, required: true },
-  postCode: { type: String, required: true },
-  email: { type: String, required: true },
-  state: { type: String, required: true },
-  city: { type: String, required: true },
-  afterSalesService: { type: String, required: true },
-  appropriateResponse: { type: String, required: true },
-  speedOfResponding: { type: String, required: true },
-  easeOfAccess: { type: String, required: true },
-  quality: { type: String, required: true },
-  timelySupply: { type: String, required: true },
-  commitment: { type: Date, required: true },
-  satisfaction: { type: String, required: true },
-  usingTime: { type: String, required: true },
-  creator: { type: Schema.Types.ObjectId, required: false }
+  category: { type: Schema.Types.ObjectId, required: true, ref: 'categories' },
+  creator: { type: Schema.Types.ObjectId, required: true, ref: 'users' },
+  question: {
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+  },
+  reply: [
+    {
+      text: { type: String, required: true },
+      name: { type: String, required: true },
+      email: { type: String, required: true },
+      status: { type: Number, required: true, default: 0 },
+      createdAt: { type: Date, required: true, default: Date.now() }
+    }
+  ],
+  status: { type: Number, required: true, default: 0 },
+  like: { type: Number, required: true, default: 0 },
 });
 
 ForumsSchema.plugin(paginate);
 ForumsSchema.plugin(require('mongoose-timestamp'));
 
-const SurvayModel = mongoose.model('surveies', ForumsSchema);
+const ForumModel = mongoose.model('forums', ForumsSchema);
 
-export default SurvayModel;
+export default ForumModel;
