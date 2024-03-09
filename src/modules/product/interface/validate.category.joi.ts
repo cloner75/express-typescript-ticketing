@@ -15,6 +15,10 @@ const id: any = {
 export const create = joi.object({
   name: joi.string().trim().required(),
 });
+export const createSub = joi.object({
+  categoryId: id.required,
+  name: joi.string().trim().required(),
+});
 
 export const find = joi.object({
   id: id.unnecessary,

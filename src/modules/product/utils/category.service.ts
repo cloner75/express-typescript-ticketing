@@ -26,6 +26,35 @@ class CategoryService extends UserService {
 
   /**
    * 
+   * @param inputData u
+   * @param creator 
+   * @returns 
+   */
+  async createCategorySub(inputData: any, creator: string): Promise<any> {
+    try {
+      const getCategory = await CategoryModel.findOne({ _id: inputData.categoryId });
+      if (!getCategory) {
+        return responser.serviceResponse(false, 'category not found');
+      }
+      const newCategory = await CategoryModel.updateOne(
+        { _id: inputData.categoryId },
+        {
+          $push: {
+            sub: {
+              name: inputData.name
+            }
+          }
+        }
+      );
+      return responser.serviceResponse(true, 'isOK', newCategory);
+    } catch (err: any) {
+      return responser.serviceResponse(false, 'can not create category');
+    }
+  }
+
+
+  /**
+   * 
    * @param inputWhere 
    * @returns 
    */

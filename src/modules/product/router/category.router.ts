@@ -5,7 +5,7 @@ import RoleBase from '../../../helpers/role';
 import Validator from '../../../helpers/validator';
 import { category } from './../../../configs/permissions';
 
-import { create, find, findOne, update, remove } from '../interface/validate.category.joi';
+import { create, find, findOne, update, remove, createSub } from '../interface/validate.category.joi';
 const validate = new Validator('product_category_service');
 const role = new RoleBase('category');
 const router = Router();
@@ -23,6 +23,14 @@ router.post('/',
   validate.validate(create, 'POST'),
   CategoryController.create
 );
+
+router.post('/sub',
+  authorization.authorization,
+  role.access(category.createSub),
+  validate.validate(createSub, 'POST'),
+  CategoryController.createSub
+);
+
 router.get('/',
   authorization.authorization,
   role.access(category.find),

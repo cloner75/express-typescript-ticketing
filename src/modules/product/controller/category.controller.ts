@@ -39,6 +39,35 @@ class CategoryController extends CategoryService {
     }
   }
 
+    /**
+   * 
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+    async createSub(req: Request, res: Response): Promise<any> {
+      const sendResponse = new Responser(res, 'category-create');
+      try {
+        const { email, _id: creator } = req.user;
+        const getUser = await super.getUserByEmail(email);
+        if (!getUser.success) {
+          return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+            message: 'user not found'
+          });
+        }
+  
+        const getNewCategory = await super.createCategorySub(req.body, creator);
+        if (!getNewCategory.success) {
+          return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+            message: getNewCategory.message
+          });
+        }
+        return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewCategory.data);
+      } catch (err) {
+        return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+      }
+    }
+
   /**
  * 
  * @param req 

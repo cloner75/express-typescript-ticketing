@@ -21,6 +21,7 @@ export const category = {
   findOne: 'findOne',
   update: 'update',
   delete: 'delete',
+  createSub: 'createSub',
 };
 
 export const brand = {
