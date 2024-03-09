@@ -29,7 +29,7 @@ class ForumController extends ForumService {
   async getPublic(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'forum-create');
     try {
-      const getNewForum = await super.createForumPublic(req.body);
+      const getNewForum = await super.getForum(req.query);
       if (!getNewForum.success) {
         return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
           message: getNewForum.message
@@ -41,7 +41,7 @@ class ForumController extends ForumService {
     }
   }
 
-  
+
   /**
    * 
    * @param req 
@@ -51,15 +51,7 @@ class ForumController extends ForumService {
   async createPublicReply(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'forum-create-public-reply');
     try {
-      const { email, _id: creator } = req.user;
-      const getUser = await super.getUserByEmail(email);
-      if (!getUser.success) {
-        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
-          message: 'user not found'
-        });
-      }
-
-      const getNewForum = await super.createForum(req.body, creator);
+      const getNewForum = await super.createReply(req.body);
       if (!getNewForum.success) {
         return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
           message: getNewForum.message
@@ -88,7 +80,6 @@ class ForumController extends ForumService {
           message: 'user not found'
         });
       }
-
       const getNewForum = await super.createForum(req.body, creator);
       if (!getNewForum.success) {
         return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {

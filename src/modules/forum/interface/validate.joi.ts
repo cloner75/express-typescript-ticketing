@@ -13,12 +13,13 @@ const id: any = {
 };
 
 export const create = joi.object({
-  category: id.required,
+  categoryId: id.required,
   title: joi.string().trim().max(255).required(),
   content: joi.string().trim().max(2000).required(),
 });
 
 export const createReply = joi.object({
+  forumId: id.required,
   text: joi.string().trim().max(2000).required(),
   name: joi.string().trim().required().max(255),
   email: joi.string().email().required(),

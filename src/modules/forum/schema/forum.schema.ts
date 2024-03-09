@@ -10,11 +10,12 @@ const ForumsSchema = new mongoose.Schema({
   },
   reply: [
     {
-      text: { type: String, required: true },
-      name: { type: String, required: true },
-      email: { type: String, required: true },
-      status: { type: Number, required: true, default: 0 },
-      createdAt: { type: Date, required: true, default: Date.now() }
+      text: { type: String, required: false },
+      name: { type: String, required: false },
+      email: { type: String, required: false },
+      status: { type: Number, required: false, default: 0 },
+      like: { type: Number, required: false, default: 0 },
+      createdAt: { type: Date, required: false, default: Date.now() }
     }
   ],
   status: { type: Number, required: true, default: 0 },

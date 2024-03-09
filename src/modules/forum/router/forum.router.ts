@@ -13,12 +13,6 @@ const router = Router();
 const ComplaintController = new Complaint();
 
 
-
-router.post('/public',
-  validate.validate(create, 'POST'),
-  ComplaintController.createPublic
-);
-
 router.post('/public/reply',
   validate.validate(createReply, 'POST'),
   ComplaintController.createPublicReply
@@ -26,8 +20,14 @@ router.post('/public/reply',
 
 
 router.get('/public',
-  validate.validate(create, 'POST'),
+  validate.validate(find, 'POST'),
   ComplaintController.getPublic
+);
+
+
+router.get('/public/:id',
+  validate.validate(findOne, 'GET'),
+  ComplaintController.findOne
 );
 
 
@@ -37,6 +37,7 @@ router.post('/',
   validate.validate(create, 'POST'),
   ComplaintController.create
 );
+
 
 router.get('/',
   authorization.authorization,

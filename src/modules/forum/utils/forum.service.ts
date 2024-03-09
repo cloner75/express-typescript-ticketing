@@ -26,8 +26,49 @@ class ForumService extends UserService {
    */
   async createForum(inputData: any, creator: string): Promise<any> {
     try {
-      const newForum = await ForumModel.create({ ...inputData, creator });
+      const createdData = {
+        category: inputData.categoryId,
+        creator,
+        question: {
+          title: inputData.title,
+          content: inputData.content,
+        },
+        reply: [],
+        status: 0,
+        like: 0,
+      };
+      const newForum = await ForumModel.create(createdData);
       return responser.serviceResponse(true, 'isOK', newForum);
+    } catch (err: any) {
+      return responser.serviceResponse(false, 'can not create forum');
+    }
+  }
+
+  /**
+ * 
+ * @param inputData u
+ * @param creator 
+ * @returns 
+ */
+  async createReply(inputData: any): Promise<any> {
+    try {
+      const { forumId: _id, ...otherDatas } = inputData;
+      const getForum = await ForumModel.findOne({ _id });
+      if (!getForum) {
+        return responser.serviceResponse(false, 'forum not found');
+      }
+
+      const newReply = await ForumModel.updateOne({ _id }, {
+        $push: {
+          reply: {
+            ...otherDatas,
+            createdAt: Date.now(),
+            status: 0,
+            like: 0
+          }
+        }
+      });
+      return responser.serviceResponse(true, 'isOK', newReply);
     } catch (err: any) {
       return responser.serviceResponse(false, 'can not create forum');
     }
@@ -55,7 +96,6 @@ class ForumService extends UserService {
    * @returns 
    */
   async getForumById(id: string) {
-    console.log("🚀 ~ ForumService ~ getForumById ~ id:", id);
     try {
       const findOneForum = await ForumModel.findOne({ _id: id });
       if (!findOneForum) {
