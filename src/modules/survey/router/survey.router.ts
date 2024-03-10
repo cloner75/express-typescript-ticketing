@@ -6,7 +6,7 @@ import authorization from '../../../helpers/authorization';
 import RoleBase from '../../../helpers/role';
 import { option } from '../../../configs/permissions';
 
-const validate = new Validator('option_service');
+const validate = new Validator('survay_service');
 const role = new RoleBase('survay');
 const router = Router();
 

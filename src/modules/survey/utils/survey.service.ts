@@ -55,7 +55,6 @@ class SurveyService extends UserService {
    * @returns 
    */
   async getSurveyById(id: string) {
-    console.log("🚀 ~ SurveyService ~ getSurveyById ~ id:", id);
     try {
       const findOneSurvey = await SurveyModel.findOne({ _id: id });
       if (!findOneSurvey) {
