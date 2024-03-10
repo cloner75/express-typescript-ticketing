@@ -13,8 +13,13 @@ import complaintModule from './complaint/complaint.module';
 import surveyModule from './survey/survey.module';
 import cooperationModule from './cooperation/cooperation.module';
 import forumModule from './forum/forum.module';
+import storageModule from './storage/storage.module';
 
 export default [
+  {
+    prefix: storageModule.prefix,
+    router: storageModule.routes
+  },
   {
     prefix: forumModule.prefix,
     router: forumModule.routes

@@ -6,6 +6,15 @@ export const product = {
   delete: 'delete',
 };
 
+export const storage = {
+  avatar: 'avatar',
+  docs: 'docs',
+  forms: 'forms',
+  blog: 'blog',
+  video: 'video',
+  image: 'image',
+};
+
 export const forum = {
   create: 'create',
   find: 'find',
