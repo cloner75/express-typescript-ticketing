@@ -8,11 +8,11 @@ export const product = {
 
 export const storage = {
   avatar: 'avatar',
-  docs: 'docs',
-  forms: 'forms',
   blog: 'blog',
-  video: 'video',
-  image: 'image',
+  product: 'product',
+  complaint: 'complaint',
+  survay: 'survay',
+  ticket: 'ticket'
 };
 
 export const forum = {

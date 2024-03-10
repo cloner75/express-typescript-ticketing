@@ -9,7 +9,7 @@ class StorageService extends UserService {
     super();
   }
 
-  async createAvatar(inputData: any, creator: string) {
+  async createPublicImage(inputData: any, creator: string) {
     try {
       const newStorage = await StorageModel.create({
         fieldName: inputData.fieldname,
@@ -20,6 +20,43 @@ class StorageService extends UserService {
         isPublic: true,
         creator
       });
+      return responser.serviceResponse(true, 'isOK', newStorage);
+    } catch (err: any) {
+      return responser.serviceResponse(false, 'can not create file');
+    }
+  }
+
+  async createPublicVideo(inputData: any, creator: string) {
+    try {
+      const newStorage = await StorageModel.create({
+        fieldName: inputData.fieldname,
+        originalName: inputData.originalname,
+        mimeType: inputData.mimetype,
+        size: inputData.size,
+        fileName: inputData.filename,
+        isPublic: true,
+        creator
+      });
+      return responser.serviceResponse(true, 'isOK', newStorage);
+    } catch (err: any) {
+      return responser.serviceResponse(false, 'can not create file');
+    }
+  }
+
+  async createPrivateImages(inputDatas: any) {
+    try {
+      let createdData = inputDatas.map((item: any) => {
+        return {
+          fieldName: item.fieldname,
+          originalName: item.originalname,
+          mimeType: item.mimetype,
+          size: item.size,
+          fileName: item.filename,
+          isPublic: false,
+        };
+      });
+
+      const newStorage = await StorageModel.create(createdData);
       return responser.serviceResponse(true, 'isOK', newStorage);
     } catch (err: any) {
       console.log("🚀 ~ StorageService ~ createAvatar ~ err:", err);

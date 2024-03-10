@@ -11,12 +11,18 @@ class StorageController extends StorageService {
     super();
   }
 
-  async uploadAvatar(req: Request, res: Response): Promise<any> {
+  /**
+   * 
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+  async uploadImage(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'storage-create');
     try {
       if (!req.file) {
         return sendResponse.success(false, httpStatus.BAD_REQUEST, httpStatus['400_MESSAGE'], {
-          message: 'avatar is required and image'
+          message: 'image is required'
         });
       }
       const { email, _id: creator } = req.user;
@@ -27,7 +33,33 @@ class StorageController extends StorageService {
         });
       }
 
-      const getNewStorage = await super.createAvatar(req.file, creator);
+      const getNewStorage = await super.createPublicImage(req.file, creator);
+      if (!getNewStorage.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewStorage.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewStorage.data);
+    } catch (err) {
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+    }
+  }
+  /**
+ * 
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+  async uploadImages(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'storage-create-bulck');
+    try {
+      if (!req.files || !req.files.length) {
+        return sendResponse.success(false, httpStatus.BAD_REQUEST, httpStatus['400_MESSAGE'], {
+          message: 'image is required'
+        });
+      }
+
+      const getNewStorage = await super.createPrivateImages(req.files);
       if (!getNewStorage.success) {
         return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
           message: getNewStorage.message
@@ -39,6 +71,48 @@ class StorageController extends StorageService {
     }
   }
 
+
+  /**
+ * 
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+  async uploadVideo(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'storage-create');
+    try {
+      if (!req.file) {
+        return sendResponse.success(false, httpStatus.BAD_REQUEST, httpStatus['400_MESSAGE'], {
+          message: 'video is required'
+        });
+      }
+
+      const { email, _id: creator } = req.user;
+      const getUser = await super.getUserByEmail(email);
+      if (!getUser.success) {
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
+      }
+
+      const getNewStorage = await super.createPublicVideo(req.file, creator);
+      if (!getNewStorage.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewStorage.message
+        });
+      }
+
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewStorage.data);
+    } catch (err) {
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+    }
+  }
+  /**
+   * 
+   * @param req 
+   * @param res 
+   * @returns 
+   */
   async showPublicFile(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'storage-show-public');
     try {
