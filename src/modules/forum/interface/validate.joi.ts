@@ -25,6 +25,12 @@ export const createReply = joi.object({
   email: joi.string().email().required(),
 });
 
+
+export const privateCreateReply = joi.object({
+  forumId: id.required,
+  text: joi.string().trim().max(2000).required(),
+});
+
 export const find = joi.object({
   id: id.unnecessary,
   fields: joi.string().trim(),
@@ -47,11 +53,18 @@ export const update = joi.object({
 
 export const updateLike = joi.object({
   id: id.required,
-  like: joi.boolean().required()
+  replyId: id.required,
+  isLike: joi.boolean().required()
 });
 
 export const updateStatus = joi.object({
   id: id.required,
+  status: joi.number().min(0).max(10).required()
+});
+
+export const updateReplyStatus = joi.object({
+  id: id.required,
+  replyId: id.required,
   status: joi.number().min(0).max(10).required()
 });
 

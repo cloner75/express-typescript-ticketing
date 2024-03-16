@@ -11,10 +11,13 @@ const ForumsSchema = new mongoose.Schema({
   reply: [
     {
       text: { type: String, required: false },
-      name: { type: String, required: false },
-      email: { type: String, required: false },
+      creator: { type: Schema.Types.ObjectId, required: true, ref: 'users' },
       status: { type: Number, required: false, default: 0 },
       like: { type: Number, required: false, default: 0 },
+      likers: [{
+        user: { type: Schema.Types.ObjectId },
+        like: { type: Boolean },
+      }],
       createdAt: { type: Date, required: false, default: Date.now() }
     }
   ],

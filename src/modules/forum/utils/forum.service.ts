@@ -107,6 +107,13 @@ class ForumService extends UserService {
     }
   }
 
+  /**
+   * 
+   * @param id 
+   * @param updatedFields 
+   * @param creator 
+   * @returns 
+   */
   async updateForumById(id: string, updatedFields: any, creator: string) {
     try {
       const updateFields = await ForumModel.updateOne({ _id: id }, { $set: { ...updatedFields, creator } });
@@ -121,6 +128,116 @@ class ForumService extends UserService {
 
 
 
+  /**
+   * 
+   * @param id 
+   * @param updatedFields 
+   * @param creator 
+   * @returns 
+   */
+  async updateForumReplyStatusById(id: string, replyId: string, status: number) {
+    console.log("🚀 ~ ForumService ~ updateForumReplyStatusById ~ replyId:", replyId);
+    console.log("🚀 ~ ForumService ~ updateForumReplyStatusById ~ status:", status);
+    try {
+      const findForum = await ForumModel.findOne({ _id: id });
+      if (!findForum) {
+        return responser.serviceResponse(false, 'forum not found');
+      }
+
+      const findIndexReply = findForum.reply.findIndex(item => item._id?.toString() === replyId);
+
+      if (findIndexReply === -1) {
+        return responser.serviceResponse(false, 'reply not found');
+      }
+
+      let replies = findForum.reply;
+      replies[findIndexReply].status = status;
+      console.log("🚀 ~ ForumService ~ updateForumReplyStatusById ~ replies[findIndexReply]:", replies[findIndexReply])
+      const updateFields = await ForumModel.updateOne({ _id: id }, { $set: { reply: replies } });
+      return responser.serviceResponse(true, 'isOK', updateFields);
+    } catch (err) {
+      console.log("🚀 ~ ForumService ~ updateForumReplyStatusById ~ err:", err);
+      return responser.serviceResponse(false, 'can not update forum');
+    }
+  }
+
+
+
+  /**
+ * 
+ * @param id 
+ * @param replyId
+ * @param updatedFields 
+ * @param creator 
+ * @returns 
+ */
+  async updateForumLikeById(id: string, replyId: string, like: any, creator: string) {
+    try {
+      const findForum = await ForumModel.findOne({ _id: id });
+      if (!findForum) {
+        return responser.serviceResponse(false, 'forum not found');
+      }
+      const findReply = findForum.reply.findIndex(item => {
+        if (item._id?.toString() === replyId) {
+          return item;
+        }
+      });
+      if (findReply === -1) {
+        return responser.serviceResponse(false, 'comment not found');
+      }
+      const findLiker = findForum.reply[findReply].likers.findIndex(item => item.user?.toString() === creator);
+
+      let replies = findForum.reply;
+
+      let update = {
+        updated: false
+      };
+
+      if (findLiker === -1) {
+        if (like === true) {
+          replies[findReply].likers.push({
+            user: creator,
+            like
+          });
+          update = { updated: true };
+          await ForumModel.updateOne({ _id: id }, {
+            $set: {
+              reply: replies,
+              like: ++findForum.like
+            }
+          });
+        }
+      } else {
+        if (findForum.reply[findReply].likers[findLiker].like !== like) {
+          let resultLike = findForum.like;
+          if (like === true) {
+            replies[findReply].likers[findLiker].like = true;
+            resultLike++;
+          } else {
+            replies[findReply].likers[findLiker].like = false;
+            resultLike--;
+          }
+          update = { updated: true };
+          await ForumModel.updateOne({ _id: id }, {
+            $set: {
+              reply: replies,
+              like: resultLike
+            }
+          });
+        }
+      }
+
+      return responser.serviceResponse(true, 'isOK', update);
+    } catch (err) {
+      return responser.serviceResponse(false, 'can not update forum');
+    }
+  }
+
+  /**
+   * 
+   * @param id 
+   * @returns 
+   */
   async removeForumById(id: string) {
     try {
       const updateFields = await ForumModel.deleteOne({ _id: id });

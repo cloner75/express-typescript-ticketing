@@ -64,6 +64,41 @@ class ForumController extends ForumService {
   }
 
 
+
+  /**
+   * 
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+  async createPrivateReply(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'forum-create-private-reply');
+    try {
+      const { email, _id: creator } = req.user;
+      const getUser = await super.getUserByEmail(email);
+
+      if (!getUser.success) {
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
+      }
+
+      const getNewForum = await super.createReply({
+        ...req.body,
+        creator
+      });
+      if (!getNewForum.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewForum.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewForum.data);
+    } catch (err) {
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+    }
+  }
+
+
   /**
    * 
    * @param req 
@@ -192,7 +227,7 @@ class ForumController extends ForumService {
   * @param res 
   * @returns 
   */
-  async updateLike(req: Request, res: Response): Promise<any> {
+  async updateReplyStatus(req: Request, res: Response): Promise<any> {
     const sendResponse = new Responser(res, 'forum-update-status');
     try {
       const { email, _id: creator } = req.user;
@@ -203,7 +238,37 @@ class ForumController extends ForumService {
         });
       }
 
-      const getNewForum = await super.updateForumById(req.params.id, req.body, creator);
+      const getNewForum = await super.updateForumReplyStatusById(req.params.id, req.body.replyId, req.body.status);
+      if (!getNewForum.success) {
+        return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
+          message: getNewForum.message
+        });
+      }
+      return sendResponse.success(true, httpStatus.CREATED, httpStatus['201_MESSAGE'], getNewForum.data);
+    } catch (err) {
+      return sendResponse.error(httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], err);
+    }
+  }
+
+
+  /**
+  * 
+  * @param req 
+  * @param res 
+  * @returns 
+  */
+  async updateLike(req: Request, res: Response): Promise<any> {
+    const sendResponse = new Responser(res, 'forum-update-like');
+    try {
+      const { email, _id: creator } = req.user;
+      const getUser = await super.getUserByEmail(email);
+      if (!getUser.success) {
+        return sendResponse.success(false, httpStatus.OK, httpStatus['204_MESSAGE'], {
+          message: 'user not found'
+        });
+      }
+
+      const getNewForum = await super.updateForumLikeById(req.params.id, req.body.replyId, req.body.isLike, creator);
       if (!getNewForum.success) {
         return sendResponse.success(false, httpStatus.INTERNAL_SERVER_ERROR, httpStatus['500_MESSAGE'], {
           message: getNewForum.message
