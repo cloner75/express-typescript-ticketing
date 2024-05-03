@@ -2,6 +2,8 @@ import { Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import appModules from './../modules/app.module';
 import DataSeeder from './seeder';
+import getRawBody from 'raw-body';
+
 
 class Connection {
   application: Express | any;
@@ -17,14 +19,18 @@ class Connection {
       origin: '*',
       METHODS: 'GET POST DELETE PUT PATCH'
     }));
-    this.application.use(this.express.urlencoded({ extended: true }));
+    this.application.use(this.express.urlencoded({
+      extended: true,
+      limit: '1000kb',
+
+    }));
     this.application.use(this.express.json());
+
   }
 
   modules() {
-    const VERSION_1 = '/v1';
     appModules.map(module => {
-      this.application.use(VERSION_1 + module.prefix, module.router);
+      this.application.use(process.env.VERSION + module.prefix, module.router);
     });
 
     this.application.use((req: Request, res: Response) => res.status(404).send({
@@ -94,6 +100,12 @@ class Connection {
       this.mongoConnection();
       new DataSeeder();
     });
+  }
+
+
+  shutDown() {
+    console.log("🚀 ~ Connection ~ shutDown : Have God Day ;)");
+    process.exit(0);
   }
 }
 
