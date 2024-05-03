@@ -8,3 +8,5 @@ https:
 .git
 
 /src/modules/storage/uploads/*
+
+coverage
