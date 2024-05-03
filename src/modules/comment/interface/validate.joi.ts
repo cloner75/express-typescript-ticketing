@@ -14,7 +14,8 @@ const id: any = {
 
 export const create = joi.object({
   text: joi.string().trim().required(),
-  productId: id.required,
+  
+  id: id.required,
   commentId: id.unnecessary
 });
 
