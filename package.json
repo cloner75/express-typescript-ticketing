@@ -7,16 +7,27 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "start:dev": "ts-node src/index.ts",
-    "start:watch": "nodemon src/index.ts"
+    "start:watch": "nodemon src/index.ts",
+    "test:unit": "ts-mocha ./test/index.ts -w --watch-files ./test/*.ts",
+    "test:coverage":"c8 npm run test:unit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/chai": "^4.3.15",
     "@types/cookie": "^0.6.0",
+    "@types/expect": "^24.3.0",
     "@types/express": "^4.17.21",
+    "@types/faker": "^6.6.9",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.16",
+    "axios": "^1.6.8",
+    "chai": "^5.1.0",
+    "faker": "^6.6.6",
+    "mocha": "^10.4.0",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
