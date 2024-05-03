@@ -1,4 +1,6 @@
 import UserModel from './../schema/user.schema';
+import { USER_ROLES } from '../../user/interface/role.interface';
+
 import * as bcrypt from 'bcrypt';
 
 class UserService {
@@ -26,7 +28,7 @@ class UserService {
       email: email.toLowerCase(),
       password: hash,
       salt,
-      role: 'user',
+      role: USER_ROLES.CUSTOMER,
     });
 
     return {
